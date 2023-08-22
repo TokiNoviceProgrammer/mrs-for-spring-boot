@@ -47,6 +47,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId><!-- thymeleafでData and Time APIクラスを正しく扱うために追加 -->
+			<artifactId>thymeleaf-extras-java8time</artifactId>
+			<version>3.0.4.RELEASE</version><!-- thymeleaf-extras-java8timeはSpring IO Platformで管理されていないため、バージョン指定が必要 -->
+		</dependency>
 	</dependencies>
 
 	<build>
