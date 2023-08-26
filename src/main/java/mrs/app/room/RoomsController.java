@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import mrs.domain.model.ReservableRoom;
-import mrs.domain.service.reservation.RoomService;
+import mrs.domain.service.room.RoomService;
 
 @Controller
 @RequestMapping("rooms")
