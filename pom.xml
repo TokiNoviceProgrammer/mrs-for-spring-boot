@@ -60,6 +60,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId><!-- @NotNullなどのバリデーションを扱うために追加 -->
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId><!-- Thymeleafを使ってHTMLをレンダリングする際にSpringSecurityのAuthenticationにアクセスするために追加 -->
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId><!-- 認証情報や認可機能にアクセスするためのThymeleafのダイアレクトを使用可能にする -->
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId><!-- org.springframework.securityを使用するために必要であるため追加 -->
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-config</artifactId><!-- org.springframework.security.configを使用するために必要であるため追加 -->
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">><!-- Thymeleafのspring-security用のダイアレクト -->
 <head>
 <meta charset="UTF-8" />
 <title
 	th:text="|${#temporals.format(date, 'yyyy/M/d')}の${room.roomName}|"></title>
 </head>
-<body>
+<body th:with="user=${#authentication.principal.user}"><!-- 認証中のUserオブジェクトを参照可能 -->
 	<div>
 		<a th:href="@{'/rooms/' + ${date}}">会議室一覧へ</a>
 	</div>
@@ -50,6 +50,7 @@
 				<span th:text="${reservation.user.firstName}" />
 			</td>
 			<td>
+				<!-- RoleがADMINまたは、ログインユーザーのIDと予約者のユーザーIDが一致した場合に予約取り消しフォームを表示する -->
 				<form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
 					  method="post"
 					  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}">
