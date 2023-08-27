@@ -2,7 +2,6 @@ package mrs.domain.service.reservation;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +29,10 @@ public class ReservationService {
 
 	public Reservation reserve(Reservation reservation) {
 		ReservableRoomId reservableRoomId = reservation.getReservableRoom().getReservableRoomId();
+		// 悲観的ロック
+		// 同じタイミングで重複する時間帯の部屋を予約しようとした場合、先に実行したリクエストのトランザクションが完了するまで待たされる
+		ReservableRoom reservable = reservableRoomRepository.findOneForUpdateByReservableRoomId(reservableRoomId);
 		// 予約可能かチェック
-		Optional<ReservableRoom> reservable = reservableRoomRepository.findById(reservableRoomId);
 		if (reservable == null) {
 			throw new UnavailableReservationException("入力の日付・部屋の組み合わせは予約できません");
 		}
