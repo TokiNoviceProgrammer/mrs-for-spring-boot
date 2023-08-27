@@ -20,4 +20,11 @@ public class ReservableRoom implements Serializable {
 	@JoinColumn(name = "room_id", insertable = false, updatable = false) // room_idと結合されるが変更が結合したテーブルに反映しないように設定する
 	@MapsId("roomId") // 複合クラスのうちの外部キーとして使用するフィールド名を指定する
 	private MeetingRoom meetingRoom;
+
+	public ReservableRoom(ReservableRoomId reservableRoomId) {
+		this.reservableRoomId = reservableRoomId;
+	}
+
+	public ReservableRoom() {
+	}
 }

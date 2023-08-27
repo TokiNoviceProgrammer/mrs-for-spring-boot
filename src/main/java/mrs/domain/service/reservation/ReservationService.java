@@ -41,17 +41,22 @@ public class ReservationService {
 			throw new AlreadyReservedException("入力の時間帯はすでに予約済みです");
 		}
 		// 予約情報を登録
+		// userに存在しないuserIdを設定したインスタンスをsaveすると、結合先のuserテーブルが存在しなく「非NULL制約に違反」になる
 		reservationRepository.save(reservation);
 		return reservation;
 	}
 
 	public void cancel(Integer reservationId, User requestUser) {
 		// findByIdの結果、reservationがnull(検索結果0件)の場合はReservationの初期値を設定
-		Reservation reservation = reservationRepository.findById(reservationId).orElse(new Reservation());
+		Reservation reservation = findById(reservationId);
 		if (RoleName.ADMIN != requestUser.getRoleName()
 				&& !Objects.equals(reservation.getUser().getUserId(), requestUser.getUserId())) {
 			throw new IllegalStateException("キャンセルできません");// メソッドが不正または不適切な時に呼出された場合スローされるException
 		}
 		reservationRepository.deleteById(reservationId);
+	}
+
+	public Reservation findById(Integer reservationId) {
+		return reservationRepository.findById(reservationId).orElse(new Reservation());
 	}
 }

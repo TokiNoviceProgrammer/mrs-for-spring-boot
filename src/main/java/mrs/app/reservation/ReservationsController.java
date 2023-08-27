@@ -10,16 +10,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import mrs.domain.model.ReservableRoom;
 import mrs.domain.model.ReservableRoomId;
 import mrs.domain.model.Reservation;
 import mrs.domain.model.RoleName;
 import mrs.domain.model.User;
+import mrs.domain.service.reservation.AlreadyReservedException;
 import mrs.domain.service.reservation.ReservationService;
+import mrs.domain.service.reservation.UnavailableReservationException;
 import mrs.domain.service.room.RoomService;
 
 @Controller
@@ -59,10 +66,47 @@ public class ReservationsController {
 
 	private User dummyUser() {
 		User user = new User();
-		user.setUserId("test-001");
+		user.setUserId("taro-yamada");
 		user.setFirstName("太郎");
 		user.setLastName("テスト");
 		user.setRoleName(RoleName.USER);
 		return user;
+	}
+
+	@PostMapping("")
+	String reserve(@Validated ReservationForm form, BindingResult bindingResult, // @Validatedで入力チェックを行うようにする
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
+			@PathVariable("roomId") Integer roomId, Model model) {
+		if (bindingResult.hasErrors()) {
+			// 入力チェックでエラーがあった場合、フォーム画面へ遷移する
+			return reserveForm(date, roomId, model);
+		}
+		ReservableRoom reservableRoom = new ReservableRoom(new ReservableRoomId(roomId, date));
+		Reservation reservation = new Reservation();
+		reservation.setStartTime(form.getStartTime());
+		reservation.setEndTime(form.getEndTime());
+		reservation.setReservableRoom(reservableRoom);
+		reservation.setUser(dummyUser());
+		try {
+			reservationService.reserve(reservation);
+		} catch (UnavailableReservationException | AlreadyReservedException e) {
+			model.addAttribute("error", e.getMessage());
+			return reserveForm(date, roomId, model);// 予約処理で例外発生時に、例外メッセージを画面に表示させる
+		}
+		// 予約一覧画面へリダイレクトする
+		// リダイレクト先のURLを構築するためのパス変数は、@RequestMappingで設定したパス中のプレースホルダの変数を使用できる
+		return "redirect:/reservations/{date}/{roomId}";
+	}
+
+	@PostMapping(params = "cancel")
+	String cancel(@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date, Model model) {
+		try {
+			reservationService.cancel(reservationId, dummyUser());
+		} catch (IllegalStateException e) {
+			model.addAttribute("error", e.getMessage());
+			return reserveForm(date, roomId, model);
+		}
+		return "redirect:/reservations/{date}/{roomId}";
 	}
 }
