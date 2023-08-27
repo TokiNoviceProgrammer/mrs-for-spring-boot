@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import mrs.domain.model.ReservableRoom;
 import mrs.domain.model.ReservableRoomId;
 import mrs.domain.model.Reservation;
-import mrs.domain.model.RoleName;
-import mrs.domain.model.User;
 import mrs.domain.service.reservation.AlreadyReservedException;
 import mrs.domain.service.reservation.ReservationService;
 import mrs.domain.service.reservation.UnavailableReservationException;
@@ -67,14 +65,14 @@ public class ReservationsController {
 		return "reservation/reserveForm";
 	}
 
-	private User dummyUser() {
-		User user = new User();
-		user.setUserId("taro-yamada");
-		user.setFirstName("太郎");
-		user.setLastName("テスト");
-		user.setRoleName(RoleName.USER);
-		return user;
-	}
+	//	private User dummyUser() {
+	//		User user = new User();
+	//		user.setUserId("taro-yamada");
+	//		user.setFirstName("太郎");
+	//		user.setLastName("テスト");
+	//		user.setRoleName(RoleName.USER);
+	//		return user;
+	//	}
 
 	@PostMapping("")
 	String reserve(@Validated ReservationForm form, BindingResult bindingResult, // @Validatedで入力チェックを行うようにする
@@ -104,10 +102,10 @@ public class ReservationsController {
 
 	@PostMapping(params = "cancel")
 	String cancel(@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
-			@AuthenticationPrincipal ReservationUserDetails userDetails, // 認証済みUserオブジェクトを取得
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date, Model model) {
 		try {
-			reservationService.cancel(reservationId, userDetails.getUser());
+			Reservation reservation = reservationService.findById(reservationId);
+			reservationService.cancel(reservation);
 		} catch (AccessDeniedException e) {
 			model.addAttribute("error", e.getMessage());
 			return reserveForm(date, roomId, model);

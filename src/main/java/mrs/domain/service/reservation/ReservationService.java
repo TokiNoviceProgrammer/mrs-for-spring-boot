@@ -1,18 +1,15 @@
 package mrs.domain.service.reservation;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mrs.domain.model.ReservableRoom;
 import mrs.domain.model.ReservableRoomId;
 import mrs.domain.model.Reservation;
-import mrs.domain.model.RoleName;
-import mrs.domain.model.User;
 import mrs.domain.repository.reservation.ReservationRepository;
 import mrs.domain.repository.room.ReservableRoomRepository;
 
@@ -48,14 +45,12 @@ public class ReservationService {
 		return reservation;
 	}
 
-	public void cancel(Integer reservationId, User requestUser) {
-		// findByIdの結果、reservationがnull(検索結果0件)の場合はReservationの初期値を設定
-		Reservation reservation = findById(reservationId);
-		if (RoleName.ADMIN != requestUser.getRoleName()
-				&& !Objects.equals(reservation.getUser().getUserId(), requestUser.getUserId())) {
-			throw new AccessDeniedException("キャンセルできません");
-		}
-		reservationRepository.deleteById(reservationId);
+	@PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
+	// メソッド実行前に認可処理を行う
+	// reservationは引数で取得
+	// principalでログイン中のユーザー情報を取得可能
+	public void cancel(Reservation reservation) {
+		reservationRepository.delete(reservation);
 	}
 
 	public Reservation findById(Integer reservationId) {
