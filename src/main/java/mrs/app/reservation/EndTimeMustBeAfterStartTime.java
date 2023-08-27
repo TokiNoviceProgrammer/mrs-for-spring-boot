@@ -12,7 +12,7 @@ import jakarta.validation.Payload;
 
 @Documented
 @Constraint(validatedBy = { EndTimeMustBeAfterStartTimeValidator.class })
-@Target({ TYPE, ANNOTATION_TYPE })
+@Target({ TYPE, ANNOTATION_TYPE }) // クラスやインターフェースに使用可能にする
 @Retention(RUNTIME)
 public @interface EndTimeMustBeAfterStartTime {
 	String message() default "{mrs.app.reservation.EndTimeMustBeAfterStartTime.message}";
