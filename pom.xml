@@ -81,6 +81,23 @@
 		    <artifactId>mybatis-spring-boot-starter</artifactId>
 		    <version>3.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>5.3.1</version>
+		</dependency>
+		<dependency>
+			<!-- webjars-locator-core・・・WebJarsのパスを自動検出するライブラリです。
+			これを追加すると、HTMLを書く時に、Bootstrapなどのバージョンの記述がいらなくなります。
+			（pom.xmlだけでバージョンの管理ができます）-->
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator-core</artifactId>
+		</dependency>
+		<dependency>
+			<!-- Thymeleafでテンプレートを共通化（フラグメント）するためのもの -->
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

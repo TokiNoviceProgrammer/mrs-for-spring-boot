@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
 <head>
-	<meta charset="UTF-8" />
-	<title></title>
+	<title>MRS</title>
 </head>
 <body>
-	<h3>ログインフォーム</h3>
-	<p style="color: red" th:if="${param.error}">Error!</p><!-- リクエストパラメータにエラーが含まれる場合、表示する -->
-	<form th:action="@{/login}" method="POST">
-		<table>
-			<tr>
-				<td><label for="username">User:</label></td>
-				<td><input type="text" id="username" name="username" value="" /></td>
-			</tr>
-			<tr>
-				<td><label for="password">Password:</label></td>
-				<td><input type="password" id="password" name="password" value="" /></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td><button type="submit">ログイン</button></td>
-			</tr>
-		</table>
-	</form>
+	<!--/* layoutに埋め込む部分を定義 */-->
+	<div layout:fragment="contents">
+		<h3>ログインフォーム</h3>
+		<p style="color: red" th:if="${param.error}">Error!</p><!-- リクエストパラメータにエラーが含まれる場合、表示する -->
+		<form th:action="@{/login}" method="POST">
+			<table>
+				<tr>
+					<td><label for="username">User:</label></td>
+					<td><input type="text" id="username" name="username" value="" /></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password:</label></td>
+					<td><input type="password" id="password" name="password" value="" /></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td><button type="submit">ログイン</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </body>
 </html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--/* layoutを使うための定義もしておく */-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<!--/* th:fragmentで別ファイルから読み込めるようにする */-->
+	<footer class="text-center my-2 bg-dark text-light" th:fragment="footer">
+		MRS Copyright 2023
+		<!--/* Modelに渡した値はどのhtmlでも参照可能 */-->
+		<!--<span th:text="${title}">ダミー</span>-->
+	</footer>
+</body>
+
+</html>

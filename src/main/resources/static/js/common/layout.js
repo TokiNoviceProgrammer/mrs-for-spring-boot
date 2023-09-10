@@ -1,0 +1,1 @@
+console.log("layout.js 読み込み");
