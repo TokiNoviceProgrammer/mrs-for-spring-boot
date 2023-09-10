@@ -76,6 +76,11 @@
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-config</artifactId><!-- org.springframework.security.configを使用するために必要であるため追加 -->
 		</dependency>
+		<dependency>
+		    <groupId>org.mybatis.spring.boot</groupId><!-- mybatis-spring-boot-starter: http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/ -->
+		    <artifactId>mybatis-spring-boot-starter</artifactId>
+		    <version>3.0.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

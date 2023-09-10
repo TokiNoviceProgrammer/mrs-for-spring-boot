@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- <mapper namespace="...">にはMapperインタフェースを指定 -->
+<!-- <insert>、<select>、<update>、<delete>のid属性にMapperインタフェースのメソッド名を指定 -->
+<!-- <select resultType="...">には検索結果をマッピングするModelクラスを指定 -->
+<!-- ※<insert>で登録時に、自動採番された値を元のModelのプロパティにセットしたい場合useGeneratedKeys="true"とkeyProperty="id"を組み合わせて指定 -->
+
+<mapper namespace="mrs.domain.repository.user.UserMapper">
+	<select id="findByUserId" resultType="mrs.domain.model.User">
+		<![CDATA[
+			select
+			    user_id
+			    , first_name
+			    , last_name
+			    , password
+			    , role_name 
+			from
+			    usr 
+			where
+			    user_id = #{userId};
+		]]>
+	</select>
+</mapper>
