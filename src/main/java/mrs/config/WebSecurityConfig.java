@@ -40,12 +40,12 @@ public class WebSecurityConfig {
 								.anyRequest().authenticated())
 				.formLogin((login) ->
 				// ログイン画面・認証urlを設定
-				login.loginPage("/loginForm").loginProcessingUrl("/login")
+				login.loginPage("/").loginProcessingUrl("/login")
 						// ユーザー名とパスワードのリクエストパラメータ名を設定
 						.usernameParameter("username").passwordParameter("password")
 						// 認証成功時と失敗時の遷移先を設定
 						// defaultSuccessUrlの第二引数をtrueにし、認証成功時は常に指定したパスへ遷移する
-						.defaultSuccessUrl("/rooms", true).failureUrl("/loginForm?error=true")
+						.defaultSuccessUrl("/rooms", true).failureUrl("/?error=true")
 						// ログイン画面・認証url・認証失敗時の遷移先へのアクセスは常に許可する
 						.permitAll());
 		return http.build();
