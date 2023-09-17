@@ -13,11 +13,12 @@ import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+import mrs.config.CurrentAuditorModel;
 
 @Getter
 @Setter
 @Entity
-public class Reservation implements Serializable {
+public class Reservation extends CurrentAuditorModel implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 主キーをJPAに自動採番させる
 	private Integer reservationId;
