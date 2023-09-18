@@ -54,6 +54,6 @@ public class ReservationService {
 	}
 
 	public Reservation findById(Integer reservationId) {
-		return reservationRepository.findById(reservationId).orElse(new Reservation());
+		return reservationRepository.findById(reservationId);
 	}
 }

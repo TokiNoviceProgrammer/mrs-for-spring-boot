@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- <mapper namespace="...">にはMapperインタフェースを指定 -->
+<!-- <insert>、<select>、<update>、<delete>のid属性にMapperインタフェースのメソッド名を指定 -->
+<!-- <select resultType="...">には検索結果をマッピングするModelクラスを指定 -->
+<!-- ※<insert>で登録時に、自動採番された値を元のModelのプロパティにセットしたい場合useGeneratedKeys="true"とkeyProperty="id"を組み合わせて指定 -->
+
+<mapper namespace="mrs.domain.repository.reservation.ReservationMapper">
+	<resultMap id="findReservationResultMap" type="mrs.domain.model.Reservation">
+		<id property="reservationId" column="reservation_id" />
+		<result property="reservationId" column="reservation_id"/>
+		<result property="startTime" column="start_time"/>
+		<result property="endTime" column="end_time"/>
+		<result property="createdAt" column="created_at"/>
+		<result property="createdId" column="created_id"/>
+		<result property="updatedAt" column="updated_at"/>
+		<result property="updatedId" column="updated_id"/>
+		<association property="reservableRoom" resultMap="ReservableRoomMap" />
+		<association property="user" resultMap="UserMap" />
+	</resultMap>
+	
+	<resultMap id="ReservableRoomMap" type="mrs.domain.model.ReservableRoom">
+		<association property="reservableRoomId" resultMap="ReservableRoomIdMap" />
+		<association property="meetingRoom" resultMap="MeetingRoomMap" />
+	</resultMap>
+	
+	<resultMap id="ReservableRoomIdMap" type="mrs.domain.model.ReservableRoomId">
+		<result property="roomId" column="room_id" />
+		<result property="reservedDate" column="reserved_date" />
+	</resultMap>
+	
+	<resultMap id="MeetingRoomMap" type="mrs.domain.model.MeetingRoom">
+		<id property="roomId" column="meeting_room_id" />
+		<result property="roomId" column="meeting_room_id" />
+		<result property="roomName" column="room_name" />
+	</resultMap>
+	
+	<resultMap id="UserMap" type="mrs.domain.model.User">
+		<id property="userId" column="user_id" />
+		<result property="userId" column="user_id" />
+		<result property="firstName" column="first_name" />
+		<result property="lastName" column="last_name" />
+		<result property="password" column="password" />
+		<result property="roleName" column="role_name" />
+	</resultMap>
+	
+	<select id="findById" resultMap="findReservationResultMap">
+		<![CDATA[
+			select
+			    reservation.reservation_id
+			    , reservation.start_time
+			    , reservation.end_time
+			    , reservable_room.room_id
+			    , reservable_room.reserved_date
+			    , meeting_room.room_id as meeting_room_id
+			    , meeting_room.room_name
+			    , usr.user_id
+			    , usr.first_name
+			    , usr.last_name
+			    , usr.password
+			    , usr.role_name
+			    , reservation.created_at
+			    , reservation.created_id
+			    , reservation.updated_at
+			    , reservation.updated_id 
+			from
+			    reservation 
+			    inner join reservable_room 
+			        on reservation.room_id = reservable_room.room_id 
+			        and reservation.reserved_date = reservable_room.reserved_date 
+			    inner join meeting_room on reservable_room.room_id = meeting_room.room_id 
+			    inner join usr 
+			        on reservation.user_id = usr.user_id 
+			where
+			    reservation_id = #{reservationId};
+		]]>
+	</select>
+	
+	<select id="findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc" resultMap="findReservationResultMap">
+		<![CDATA[
+			select
+			    reservation.reservation_id
+			    , reservation.start_time
+			    , reservation.end_time
+			    , reservable_room.room_id
+			    , reservable_room.reserved_date
+			    , meeting_room.room_id as meeting_room_id
+			    , meeting_room.room_name
+			    , usr.user_id
+			    , usr.first_name
+			    , usr.last_name
+			    , usr.password
+			    , usr.role_name
+			    , reservation.created_at
+			    , reservation.created_id
+			    , reservation.updated_at
+			    , reservation.updated_id 
+			from
+			    reservation 
+			    inner join reservable_room 
+			        on reservation.room_id = reservable_room.room_id 
+			        and reservation.reserved_date = reservable_room.reserved_date 
+			    inner join meeting_room on reservable_room.room_id = meeting_room.room_id 
+			    inner join usr 
+			        on reservation.user_id = usr.user_id 
+			where
+			    reservation.room_id = #{roomId}
+			    and reservation.reserved_date = #{reservedDate}
+			order by reservation.start_time asc;
+		]]>
+	</select>
+	
+	<delete id="delete">
+		<![CDATA[
+			delete 
+			from
+			    reservation 
+			where
+			    reservation_id = #{reservationId};
+		]]>
+	</delete>
+	
+	<insert id="save">
+		<![CDATA[
+			insert 
+			into reservation( 
+			    start_time
+			    , end_time
+			    , room_id
+			    , reserved_date
+			    , user_id
+			    , created_at
+			    , created_id
+			    , updated_at
+			    , updated_id
+			) 
+			values ( 
+			    #{startTime}
+			    , #{endTime}
+			    , #{reservableRoom.reservableRoomId.roomId}
+			    , #{reservableRoom.reservableRoomId.reservedDate}
+			    , #{user.userId}
+			    , #{createdAt}
+			    , #{createdId}
+			    , #{updatedAt}
+			    , #{updatedId}
+			);
+		]]>
+	</insert>
+</mapper>

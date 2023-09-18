@@ -2,30 +2,20 @@ package mrs.config;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Getter;
+import lombok.Setter;
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
-
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter
+@Setter
+// 監査証跡
 public class CurrentAuditorModel {
-	@CreatedDate
+
 	private LocalDateTime createdAt;
 
-	@CreatedBy
 	private String createdId;
 
-	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
-	@LastModifiedBy
 	private String updatedId;
 
 }

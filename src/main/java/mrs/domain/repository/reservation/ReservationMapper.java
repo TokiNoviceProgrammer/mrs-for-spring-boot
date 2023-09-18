@@ -2,10 +2,13 @@ package mrs.domain.repository.reservation;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import mrs.domain.model.ReservableRoomId;
 import mrs.domain.model.Reservation;
 
-public interface ReservationRepository {
+@Mapper
+public interface ReservationMapper {
 	public Reservation findById(Integer reservationId);
 
 	public int delete(Reservation reservation);
