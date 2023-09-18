@@ -58,7 +58,8 @@
 						<!-- RoleがADMINまたは、ログインユーザーのIDと予約者のユーザーIDが一致した場合に予約取り消しフォームを表示する -->
 						<form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
 							  method="post"
-							  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}">
+							  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}"
+							  onSubmit="return checkBeforeAction('取消')">
 							<input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
 							<input type="submit" class="btn btn-danger" name="cancel" value="取消" />
 						</form>
