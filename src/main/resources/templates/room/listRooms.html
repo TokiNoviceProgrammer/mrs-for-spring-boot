@@ -6,18 +6,27 @@
 <body>
 	<!--/* layoutに埋め込む部分を定義 */-->
 	<div layout:fragment="contents">
-		<h3>会議室</h3>
-		<a th:href="@{'/rooms/' + ${date.minusDays(1)}}">&lt; 前日</a>
-		<span th:text="|${#temporals.format(date, 'yyyy/M/d')}の会議室|"></span>
-		<a th:href="@{'/rooms/' + ${date.plusDays(1)}}">翌日 &gt;</a>
-		<ul>
-			<li th:each="room: ${rooms}">
-				<a th:href="@{'/reservations/' + ${date} + '/' + ${room.meetingRoom.roomId}}"
-				   th:text="${room.meetingRoom.roomName}"></a>
-			</li>
-		</ul>
+		<!-- <h3>会議室</h3>-->
+		<!-- <a class="link-opacity-50-hover" th:href="@{'/rooms/' + ${date.minusDays(1)}}">&lt; 前日</a>-->
+		<!-- <span th:text="|${#temporals.format(date, 'yyyy/M/d')}の会議室|"></span>-->
+		<!-- <a class="link-opacity-50-hover" th:href="@{'/rooms/' + ${date.plusDays(1)}}">翌日 &gt;</a>-->
+		<table style="width: 40%; font-size: 150%;" class="text-center table table-secondary table-hover mx-auto">
+			<tr>
+				<th>
+					<a class="link-opacity-50-hover" th:href="@{'/rooms/' + ${date.minusDays(1)}}">&lt; 前日</a>
+					<span th:text="|${#temporals.format(date, 'yyyy/M/d')}の会議室一覧|"></span>
+					<a class="link-opacity-50-hover" th:href="@{'/rooms/' + ${date.plusDays(1)}}">翌日 &gt;</a>
+				</th>
+			</tr>
+			<tr th:each="room: ${rooms}">
+				<td valign="middle">
+					<a class="link-opacity-50-hover" th:href="@{'/reservations/' + ${date} + '/' + ${room.meetingRoom.roomId}}"
+					   th:text="${room.meetingRoom.roomName}"></a>
+				</td>
+			</tr>
+		</table>
 		<form th:action="@{/logout}" method="post">
-			<button>ログアウト</button>
+			<button class="btn btn-danger">ログアウト</button>
 		</form>
 	</div>
 </body>

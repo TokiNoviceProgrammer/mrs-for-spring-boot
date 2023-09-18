@@ -9,57 +9,62 @@
 	<!--/* layoutに埋め込む部分を定義 */-->
 	<div layout:fragment="contents">
 		<div>
-			<a th:href="@{'/rooms/' + ${date}}">会議室一覧へ</a>
+			<a class="link-opacity-50-hover" th:href="@{'/rooms/' + ${date}}">会議室一覧へ</a>
 		</div>
 		<p style="color: red" th:if="${error != null}" th:text="${error}"></p>
 		<form th:object="${reservationForm}"
 			  th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
 			  method="post">
-			会議室: <span th:text="${room.roomName}"></span>
+			<b>【会議室】</b> <span th:text="${room.roomName}"></span>
 			<br />
-			予約者名: <span th:text="${user.lastName + ' ' + user.firstName}"></span>
+			<b>【予約者名】</b> <span th:text="${user.lastName + ' ' + user.firstName}"></span>
 			<br />
-			日付: <span th:text="${#temporals.format(date, 'yyyy/M/d')}"></span>
+			<b>【日付】</b> <span th:text="${#temporals.format(date, 'yyyy/M/d')}"></span>
 			<br />
-			時間帯: 
-			<select th:field="*{startTime}">
+			<div><b>【開始時間】</b></div>
+			<select style="width:20%;" class="form-select" th:field="*{startTime}">
 				<option th:each="time : ${timeList}" th:text="${time}" th:value="${time}"></option>
 			</select>
 			<span th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color: red">error!</span>
-			-
-			<select th:field="*{endTime}">
+			<div><b>【終了時間】</b></div>
+			<select style="width:20%;" class="form-select" th:field="*{endTime}">
 				<option th:each="time : ${timeList}" th:text="${time}" th:value="${time}"></option>
 			</select>
 			<span th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" style="color: red">error!</span>
 			<br />
-			<button>予約</button>
+			<button class="btn btn-success">予約</button>
 		</form>
-		<table>
-			<tr>
-				<th>時間帯</th>
-				<th>予約者</th>
-				<th>操作</th>
-			</tr>
-			<tr th:each="reservation : ${reservations}">
-				<td>
-					<span th:text="${reservation.startTime}" />
-					-
-					<span th:text="${reservation.endTime}" />
-				</td>
-				<td>
-					<span th:text="${reservation.user.lastName}" />
-					<span th:text="${reservation.user.firstName}" />
-				</td>
-				<td>
-					<!-- RoleがADMINまたは、ログインユーザーのIDと予約者のユーザーIDが一致した場合に予約取り消しフォームを表示する -->
-					<form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
-						  method="post"
-						  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}">
-						<input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
-						<input type="submit" name="cancel" value="取消" />
-					</form>
-				</td>
-			</tr>
+		<br />
+		<table class="table table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>時間帯</th>
+					<th>予約者</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<thead class="table-success">
+				<tr th:each="reservation : ${reservations}">
+					<td valign="middle">
+						<span th:text="${reservation.startTime}" />
+						-
+						<span th:text="${reservation.endTime}" />
+					</td>
+					<td valign="middle">
+						<span th:text="${reservation.user.lastName}" />
+						<span th:text="${reservation.user.firstName}" />
+					</td>
+					<td>
+						<!-- RoleがADMINまたは、ログインユーザーのIDと予約者のユーザーIDが一致した場合に予約取り消しフォームを表示する -->
+						<form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
+							  method="post"
+							  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}">
+							<input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
+							<input type="submit" class="btn btn-danger" name="cancel" value="取消" />
+						</form>
+					</td>
+				</tr>
+			</thead>
 		</table>
 	</div>
 </body>

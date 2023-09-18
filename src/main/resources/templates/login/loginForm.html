@@ -6,23 +6,18 @@
 <body>
 	<!--/* layoutに埋め込む部分を定義 */-->
 	<div layout:fragment="contents">
-		<h3>ログインフォーム</h3>
+		<h3>ログイン</h3>
 		<p style="color: red" th:if="${param.error}">Error!</p><!-- リクエストパラメータにエラーが含まれる場合、表示する -->
 		<form th:action="@{/login}" method="POST">
-			<table>
-				<tr>
-					<td><label for="username">User:</label></td>
-					<td><input type="text" id="username" name="username" value="" /></td>
-				</tr>
-				<tr>
-					<td><label for="password">Password:</label></td>
-					<td><input type="password" id="password" name="password" value="" /></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td><button type="submit">ログイン</button></td>
-				</tr>
-			</table>
+			<div class="mb-3">
+				<label for="username" class="col-form-label">ユーザID</label>
+				<input style="width:25%;" type="text" class="form-control" id="username" name="username" value="" />
+			</div>
+			<div class="mb-3">
+				<label for="password" class="col-form-label">パスワード</label>
+				<input style="width:25%;" type="password" class="form-control" id="password" name="password" value="" />
+			</div>
+			<button class="btn btn-primary" type="submit">ログイン</button>
 		</form>
 	</div>
 </body>
