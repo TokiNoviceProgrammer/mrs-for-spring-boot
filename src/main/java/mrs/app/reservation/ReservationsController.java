@@ -1,6 +1,7 @@
 package mrs.app.reservation;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,7 +102,9 @@ public class ReservationsController {
 	}
 
 	@PostMapping(params = "cancel")
-	String cancel(@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
+	String cancel(@RequestParam("reservationId") Integer reservationId,
+			@RequestParam("updatedAt") LocalDateTime updatedAt,
+			@PathVariable("roomId") Integer roomId,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date, Model model) {
 		try {
 			Reservation reservation = reservationService.findById(reservationId);

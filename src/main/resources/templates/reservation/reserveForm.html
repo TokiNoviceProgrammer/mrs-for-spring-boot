@@ -61,6 +61,7 @@
 							  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}"
 							  onSubmit="return checkBeforeAction('取消')">
 							<input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
+							<input type="hidden" name="updatedAt" th:value="${reservation.updatedAt}" />
 							<input type="submit" class="btn btn-danger" name="cancel" value="取消" />
 						</form>
 					</td>
