@@ -5,7 +5,7 @@
 	<title
 		th:text="|${#temporals.format(date, 'yyyy/M/d')}の${room.roomName}|"></title>
 </head>
-<body th:with="user=${#authentication.principal.user}"><!-- 認証中のUserオブジェクトを参照可能 -->
+<body th:with="user=${#authentication.principal.getUser()}"><!-- 認証中のUserオブジェクトを参照可能 -->
 	<!--/* layoutに埋め込む部分を定義 */-->
 	<div layout:fragment="contents">
 		<div>
@@ -17,7 +17,7 @@
 			  method="post">
 			<b>【会議室】</b> <span th:text="${room.roomName}"></span>
 			<br />
-			<b>【予約者名】</b> <span th:text="${user.lastName + ' ' + user.firstName}"></span>
+			<b>【予約者名】</b> <span th:text="${user.getLastName() + ' ' + user.getFirstName()}"></span>
 			<br />
 			<b>【日付】</b> <span th:text="${#temporals.format(date, 'yyyy/M/d')}"></span>
 			<br />
