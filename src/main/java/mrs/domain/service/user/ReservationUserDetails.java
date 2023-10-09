@@ -38,16 +38,19 @@ public class ReservationUserDetails implements UserDetails {
 		return this.user.getUserId();
 	}
 
-	////////////////////////////////////////////////
-	// アカウント期限切れ・アカウントロック・パスワード有効期限切れ・アカウント無効化に関するプロパティは使用しないようにする
-	////////////////////////////////////////////////
 	@Override
-	public boolean isAccountNonExpired() {
+	public boolean isAccountNonLocked() {
+		if ("1".equals(this.user.getAccountLockFlg())) {
+			return false;
+		}
 		return true;
 	}
 
+	////////////////////////////////////////////////
+	// アカウント期限切れ・パスワード有効期限切れ・アカウント無効化に関するプロパティは使用しないようにする
+	////////////////////////////////////////////////
 	@Override
-	public boolean isAccountNonLocked() {
+	public boolean isAccountNonExpired() {
 		return true;
 	}
 

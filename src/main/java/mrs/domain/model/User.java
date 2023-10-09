@@ -22,6 +22,7 @@ public class User implements Serializable {
 	private String password;
 	private String firstName;
 	private String lastName;
+	private String accountLockFlg;
 	@Enumerated(EnumType.STRING)
 	private RoleName roleName;
 }

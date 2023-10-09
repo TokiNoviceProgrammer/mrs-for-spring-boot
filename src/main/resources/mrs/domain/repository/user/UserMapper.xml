@@ -15,6 +15,7 @@
 			    , last_name
 			    , password
 			    , role_name 
+			    , account_lock_flg
 			from
 			    usr 
 			where
