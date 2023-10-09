@@ -1,5 +1,6 @@
 package mrs.app.login;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * this class implements the authenticate method from AuthenticateProvider interface,
@@ -23,6 +27,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
 	UserDetailsService userDetailsService;
+
+	private PasswordEncoder passwordEncoder;
+
+	public CustomAuthenticationProvider() {
+		this(PasswordEncoderFactories.createDelegatingPasswordEncoder());
+	}
+
+	public CustomAuthenticationProvider(PasswordEncoder passwordEncoder) {
+		setPasswordEncoder(passwordEncoder);
+	}
 
 	/**
 	 * the below authenticate method must provide an Auth object token once it has
@@ -40,6 +54,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 
 		UserDetails user = userDetailsService.loadUserByUsername(userName);
+
+		if (Objects.isNull(user)) {
+			throw new BadCredentialsException("指定のユーザは存在しません");
+		}
+
+		if (!this.passwordEncoder.matches(password, user.getPassword())) {
+			throw new BadCredentialsException("パスワードが誤っています");
+		}
+
 		Authentication auth = createSuccessfulAuthentication(authentication, user);
 
 		return auth;
@@ -50,6 +73,18 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 				authentication.getCredentials(), user.getAuthorities());
 		token.setDetails(authentication.getDetails());
 		return token;
+	}
+
+	/**
+	 * Sets the PasswordEncoder instance to be used to encode and validate passwords. If
+	 * not set, the password will be compared using
+	 * {@link PasswordEncoderFactories#createDelegatingPasswordEncoder()}
+	 * @param passwordEncoder must be an instance of one of the {@code PasswordEncoder}
+	 * types.
+	 */
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		Assert.notNull(passwordEncoder, "passwordEncoder cannot be null");
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	/**
