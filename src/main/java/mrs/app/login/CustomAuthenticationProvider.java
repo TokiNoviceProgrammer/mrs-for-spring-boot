@@ -1,17 +1,16 @@
 package mrs.app.login;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,6 +20,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
+
+	@Autowired
+	UserDetailsService userDetailsService;
 
 	/**
 	 * the below authenticate method must provide an Auth object token once it has
@@ -37,12 +39,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			throw new BadCredentialsException("半角英数字のみで入力してください");
 		}
 
-		Collection<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
-		grantedAuths.add(new SimpleGrantedAuthority("ADMIN"));
-		grantedAuths.add(new SimpleGrantedAuthority("CUSTOMER"));
-		Authentication auth = new UsernamePasswordAuthenticationToken(userName, password, grantedAuths);
+		UserDetails user = userDetailsService.loadUserByUsername(userName);
+		Authentication auth = createSuccessfulAuthentication(authentication, user);
 
 		return auth;
+	}
+
+	private Authentication createSuccessfulAuthentication(Authentication authentication, UserDetails user) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user,
+				authentication.getCredentials(), user.getAuthorities());
+		token.setDetails(authentication.getDetails());
+		return token;
 	}
 
 	/**

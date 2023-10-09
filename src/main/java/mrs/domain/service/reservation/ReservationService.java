@@ -45,7 +45,7 @@ public class ReservationService {
 		return reservation;
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
+	@PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.getUser().getUserId()")
 	// メソッド実行前に認可処理を行う
 	// reservationは引数で取得
 	// principalでログイン中のユーザー情報を取得可能
