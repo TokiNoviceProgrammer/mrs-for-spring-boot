@@ -45,7 +45,7 @@ public class WebSecurityConfig {
 						.usernameParameter("username").passwordParameter("password")
 						// 認証成功時と失敗時の遷移先を設定
 						// defaultSuccessUrlの第二引数をtrueにし、認証成功時は常に指定したパスへ遷移する
-						.defaultSuccessUrl("/rooms", true).failureUrl("/?error=true")
+						.defaultSuccessUrl("/rooms", true).failureUrl("/")
 						// ログイン画面・認証url・認証失敗時の遷移先へのアクセスは常に許可する
 						.permitAll());
 		return http.build();

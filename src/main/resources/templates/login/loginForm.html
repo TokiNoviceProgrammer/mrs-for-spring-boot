@@ -7,7 +7,10 @@
 	<!--/* layoutに埋め込む部分を定義 */-->
 	<div layout:fragment="contents">
 		<h3>ログイン</h3>
-		<p style="color: red" th:if="${param.error}">Error!</p><!-- リクエストパラメータにエラーが含まれる場合、表示する -->
+        <!-- エラーメッセージ -->
+        <p style="color: red" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
+            th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+        </p>
 		<form th:action="@{/login}" method="POST">
 			<div class="mb-3">
 				<label for="username" class="col-form-label">ユーザID</label>
