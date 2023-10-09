@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import mrs.app.login.CustomAuthenticationProvider;
 import mrs.domain.service.user.ReservationUserDetailsService;
 
 @EnableMethodSecurity(prePostEnabled = true) // ReservationServiceのcancelで使用している@PreAuthorizeを有効化
@@ -19,6 +20,9 @@ import mrs.domain.service.user.ReservationUserDetailsService;
 public class WebSecurityConfig {
 	@Autowired
 	ReservationUserDetailsService userDetailsService;
+
+	@Autowired
+	CustomAuthenticationProvider customAuthProvider;
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
