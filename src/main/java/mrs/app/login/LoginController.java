@@ -16,4 +16,10 @@ public class LoginController {
 	String changePassword() {
 		return "login/changePassword";
 	}
+
+	@GetMapping("/system")
+	// パスワード変更表示
+	String system() {
+		return "login/system";
+	}
 }

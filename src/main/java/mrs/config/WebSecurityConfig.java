@@ -8,14 +8,21 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import mrs.app.login.CustomAuthenticationProvider;
+import mrs.domain.model.User;
+import mrs.domain.service.user.ReservationUserDetails;
 
 @EnableMethodSecurity(prePostEnabled = true) // ReservationServiceのcancelで使用している@PreAuthorizeを有効化
 @Configuration
@@ -62,11 +69,31 @@ public class WebSecurityConfig {
 						// ユーザー名とパスワードのリクエストパラメータ名を設定
 						.usernameParameter("username").passwordParameter("password")
 						// 認証成功時と失敗時の遷移先を設定
-						// defaultSuccessUrlの第二引数をtrueにし、認証成功時は常に指定したパスへ遷移する
-						.defaultSuccessUrl("/rooms", true).failureHandler(this.failureHandler())
+						// 成功時・失敗時のハンドラーは独自で実装して設定
+						.successHandler(this.successHandler()).failureHandler(this.failureHandler())
 						// ログイン画面・認証url・認証失敗時の遷移先へのアクセスは常に許可する
 						.permitAll());
 		return http.build();
+	}
+
+	/**
+	 * @return ログイン成功時のハンドラーを返却
+	 */
+	private AuthenticationSuccessHandler successHandler() {
+		return (request, response, exception) -> {
+			AuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler("/rooms");
+
+			// 資格情報を取得し、userIdがsysytemの場合は専用ページに遷移するようにする
+			SecurityContext context = SecurityContextHolder.getContext();
+			Authentication authentication = context.getAuthentication();
+			ReservationUserDetails principal = (ReservationUserDetails) authentication.getPrincipal();
+			User user = principal.getUser();
+			if ("system".equals(user.getUserId())) {
+				handler = new SimpleUrlAuthenticationSuccessHandler("/system");
+			}
+
+			handler.onAuthenticationSuccess(request, response, exception);
+		};
 	}
 
 	/**
@@ -83,4 +110,5 @@ public class WebSecurityConfig {
 			handler.onAuthenticationFailure(request, response, exception);
 		};
 	}
+
 }
