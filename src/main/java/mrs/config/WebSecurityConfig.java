@@ -1,28 +1,39 @@
 package mrs.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import mrs.app.login.CustomAuthenticationProvider;
-import mrs.domain.service.user.ReservationUserDetailsService;
 
 @EnableMethodSecurity(prePostEnabled = true) // ReservationServiceのcancelで使用している@PreAuthorizeを有効化
 @Configuration
 @EnableWebSecurity // spring securityのweb連携機能(CSRF対策など)を有効にする
 public class WebSecurityConfig {
-	@Autowired
-	ReservationUserDetailsService userDetailsService;
 
-	@Autowired
-	CustomAuthenticationProvider customAuthProvider;
+	/**
+	 * ユーザパスワード認証用のAuthenticationProviderを登録
+	 * @param userDetailsService UserDetailsService
+	 * @param passwordEncoder PasswordEncoderF
+	 * @return AuthenticationProvider
+	 */
+	@Bean
+	public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+			PasswordEncoder passwordEncoder) {
+		CustomAuthenticationProvider provider = new CustomAuthenticationProvider();
+		provider.setUserDetailsService(userDetailsService);
+		provider.setHideUserNotFoundExceptions(false);// UsernameNotFoundExceptionsがBadCredentialsExceptionに書き換えられないようにする
+		provider.setPasswordEncoder(passwordEncoder);
+		return provider;
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
