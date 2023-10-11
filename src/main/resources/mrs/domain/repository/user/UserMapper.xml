@@ -16,6 +16,7 @@
 			    , password
 			    , role_name 
 			    , account_lock_flg
+			    , init_flg
 			from
 			    usr 
 			where
