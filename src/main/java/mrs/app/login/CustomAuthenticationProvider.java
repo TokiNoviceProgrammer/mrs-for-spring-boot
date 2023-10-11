@@ -1,10 +1,13 @@
 package mrs.app.login;
 
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import mrs.domain.service.user.ReservationUserDetails;
 
 /**
  * カスタム認証プロバイダ<br>
@@ -20,6 +23,12 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 			super.additionalAuthenticationChecks(userDetails, authentication);
 		} catch (BadCredentialsException ex) {
 			throw new BadCredentialsException("パスワード認証に失敗しました。");
+		}
+
+		// 独自の認証
+		ReservationUserDetails reservationUserDetails = (ReservationUserDetails) userDetails;
+		if ("1".equals(reservationUserDetails.getUser().getInitFlg())) {
+			throw new AccountExpiredException("パスワードを変更してください。");
 		}
 	}
 

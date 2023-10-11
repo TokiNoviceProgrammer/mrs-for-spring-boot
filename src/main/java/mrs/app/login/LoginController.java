@@ -10,4 +10,10 @@ public class LoginController {
 	String loginForm() {
 		return "login/loginForm";
 	}
+
+	@GetMapping("/changePassword")
+	// パスワード変更表示
+	String changePassword() {
+		return "login/changePassword";
+	}
 }
