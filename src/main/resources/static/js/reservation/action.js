@@ -45,6 +45,8 @@ function postAction() {
     })
         .then(data => {
             // サーバーからのレスポンスを処理
-            // ex)結果を表示する要素に表示するなどの処理
+            // ex)リダイレクトなど
+            const redirectUrl = '';
+            window.location.href = redirectUrl;
         });
 }
