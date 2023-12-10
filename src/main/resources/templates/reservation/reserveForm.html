@@ -4,6 +4,7 @@
 <head>
 	<title
 		th:text="|${#temporals.format(date, 'yyyy/M/d')}の${room.roomName}|"></title>
+	<script th:src="@{/js/reservation/action.js}"></script>
 </head>
 <body th:with="user=${#authentication.principal.getUser()}"><!-- 認証中のUserオブジェクトを参照可能 -->
 	<!--/* layoutに埋め込む部分を定義 */-->
@@ -55,15 +56,21 @@
 						<span th:text="${reservation.user.firstName}" />
 					</td>
 					<td>
-						<!-- RoleがADMINまたは、ログインユーザーのIDと予約者のユーザーIDが一致した場合に予約取り消しフォームを表示する -->
-						<form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
-							  method="post"
-							  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}"
-							  onSubmit="return checkBeforeAction('取消')">
-							<input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
-							<input type="hidden" name="updatedAt" th:value="${reservation.updatedAt}" />
-							<input type="submit" class="btn btn-danger" name="cancel" value="取消" />
-						</form>
+						<div style="display: flex;">
+							<!-- RoleがADMINまたは、ログインユーザーのIDと予約者のユーザーIDが一致した場合に予約取り消しフォームを表示する -->
+							<form th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}"
+								  method="post"
+								  sec:authorize="${hasRole('ADMIN') or #vars.user.userId == #vars.reservation.user.userId}"
+								  onSubmit="return checkBeforeAction('取消')">
+								<input type="hidden" name="reservationId" th:value="${reservation.reservationId}" />
+								<input type="hidden" name="updatedAt" th:value="${reservation.updatedAt}" />
+								<input type="submit" class="btn btn-danger" name="cancel" value="取消" />
+							</form>
+							<!-- 検証用のform -->
+							<form id="test">
+								<input type="button" class="btn btn-info" name="test" value="検証" />
+							</form>
+						</div>
 					</td>
 				</tr>
 			</thead>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.1.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>mrs</groupId>
 	<artifactId>mrs-for-spring-boot</artifactId>
@@ -48,43 +49,59 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.thymeleaf.extras</groupId><!-- thymeleafでData and Time APIクラスを正しく扱うために追加 -->
+			<groupId>org.thymeleaf.extras</groupId><!-- thymeleafでData and Time
+			APIクラスを正しく扱うために追加 -->
 			<artifactId>thymeleaf-extras-java8time</artifactId>
-			<version>3.0.4.RELEASE</version><!-- thymeleaf-extras-java8timeはSpring IO Platformで管理されていないため、バージョン指定が必要 -->
+			<version>3.0.4.RELEASE</version><!--
+			thymeleaf-extras-java8timeはSpring IO Platformで管理されていないため、バージョン指定が必要 -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId><!-- jakarta.persistence(@Entity等)を扱うために追加 -->
+			<artifactId>spring-boot-starter-data-jpa</artifactId><!--
+			jakarta.persistence(@Entity等)を扱うために追加 -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId><!-- @NotNullなどのバリデーションを扱うために追加 -->
+			<artifactId>spring-boot-starter-validation</artifactId><!--
+			@NotNullなどのバリデーションを扱うために追加 -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.thymeleaf.extras</groupId><!-- Thymeleafを使ってHTMLをレンダリングする際にSpringSecurityのAuthenticationにアクセスするために追加 -->
-			<artifactId>thymeleaf-extras-springsecurity6</artifactId><!-- 認証情報や認可機能にアクセスするためのThymeleafのダイアレクトを使用可能にする -->
+			<groupId>org.thymeleaf.extras</groupId><!--
+			Thymeleafを使ってHTMLをレンダリングする際にSpringSecurityのAuthenticationにアクセスするために追加 -->
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId><!--
+			認証情報や認可機能にアクセスするためのThymeleafのダイアレクトを使用可能にする -->
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-web</artifactId><!-- org.springframework.securityを使用するために必要であるため追加 -->
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId><!--
+			org.springframework.securityを使用するために必要であるため追加 -->
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-config</artifactId><!-- org.springframework.security.configを使用するために必要であるため追加 -->
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId><!--
+			org.springframework.security.configを使用するために必要であるため追加 -->
 		</dependency>
 		<dependency>
-		    <groupId>org.mybatis.spring.boot</groupId><!-- mybatis-spring-boot-starter: http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/ -->
-		    <artifactId>mybatis-spring-boot-starter</artifactId>
-		    <version>3.0.2</version>
+			<groupId>org.mybatis.spring.boot</groupId><!--
+			mybatis-spring-boot-starter:
+			http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/ -->
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>3.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
 			<version>5.3.1</version>
+		</dependency>
+		<!-- jQueryの依存関係を追加 -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.6.0</version>
 		</dependency>
 		<dependency>
 			<!-- webjars-locator-core・・・WebJarsのパスを自動検出するライブラリです。
