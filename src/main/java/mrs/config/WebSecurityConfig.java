@@ -1,10 +1,14 @@
 package mrs.config;
 
+import java.util.Collections;
+
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,6 +32,20 @@ import mrs.domain.service.user.ReservationUserDetails;
 @Configuration
 @EnableWebSecurity // spring securityのweb連携機能(CSRF対策など)を有効にする
 public class WebSecurityConfig {
+
+	/**
+	 * 認証処理を実施に使用するためにbean登録する
+	 *
+	 * @param authenticationProvider 独自でbean登録した認証用のAuthenticationProvider
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public AuthenticationManager authenticationManagerBean(AuthenticationProvider authenticationProvider)
+			throws Exception {
+		// AuthenticationManagerの実装クラス(ProviderManager)のコンストラクタの引数にList<AuthenticationProvider>を変更不可のリストとして設定する
+		return new ProviderManager(Collections.singletonList(authenticationProvider));
+	}
 
 	/**
 	 * ユーザパスワード認証用のAuthenticationProviderを登録
@@ -60,7 +78,8 @@ public class WebSecurityConfig {
 								// 「cssやjs、imagesなどの静的リソース」をアクセス可能にする
 								.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 								// 「/registerUser」と「/login」にはログインなしでもアクセス可能にする
-								.requestMatchers("/registerUser", "/login", "/changePassword").permitAll()
+								.requestMatchers("/registerUser", "/login", "/customLoginForm", "customLogin")
+								.permitAll()
 								// 認証の必要があるように設定
 								.anyRequest().authenticated())
 				.formLogin((login) ->
