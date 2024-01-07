@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -81,7 +82,21 @@ public class LoginController {
 
 	@GetMapping("/system")
 	// パスワード変更表示
-	String system(Model mode) {
+	String system(Model model) {
+		this.addTestModelList(model);
+		return "login/system";
+	}
+
+	@PostMapping("/system")
+	String receiveCheckedData(@RequestBody List<TestModel> testModelList, Model model) {
+		if (this.checkedNgTestModelList(testModelList)) {
+			return "error/400";
+		}
+		this.addTestModelList(model);
+		return "login/system";
+	}
+
+	private void addTestModelList(Model model) {
 		List<TestModel> testModelList = new ArrayList<>();
 
 		TestModel testModel01 = new TestModel();
@@ -105,8 +120,15 @@ public class LoginController {
 		testModel03.setKbn("20");
 		testModelList.add(testModel03);
 
-		mode.addAttribute("testModelList", testModelList);
+		model.addAttribute("testModelList", testModelList);
+	}
 
-		return "login/system";
+	private boolean checkedNgTestModelList(List<TestModel> testModelList) {
+		for (TestModel testModel : testModelList) {
+			if (testModel.getBranch().length() > 2) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -30,7 +30,10 @@
 			</thead>
 			<tbody>
 				<tr th:each="testModel : ${testModelList}">
-					<td><input type="checkbox" class="check checkedtd" name="checkbox" value="" /></td>
+					<td><input type="checkbox" class="check checkedtd" name="checkbox" value=""
+							th:data-no="${testModel.no}" th:data-branch="${testModel.branch}"
+							th:data-val="${testModel.val}" th:data-kbn="${testModel.kbn}" />
+					</td>
 					<td><span th:text="${testModel.no}"></span></td>
 					<td><span th:text="${testModel.branch}"></span></td>
 					<td><span th:text="${testModel.val}"></span></td>
@@ -38,6 +41,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<input type="button" id="postbtn" value="post" />
 	</div>
 </body>
 
