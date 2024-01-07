@@ -78,7 +78,7 @@ public class WebSecurityConfig {
 								// 「cssやjs、imagesなどの静的リソース」をアクセス可能にする
 								.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 								// 「/registerUser」と「/login」にはログインなしでもアクセス可能にする
-								.requestMatchers("/registerUser", "/login", "/customLoginForm", "customLogin")
+								.requestMatchers("/registerUser", "/login", "/customLoginForm", "customLogin", "system")
 								.permitAll()
 								// 認証の必要があるように設定
 								.anyRequest().authenticated())

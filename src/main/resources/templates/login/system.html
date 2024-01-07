@@ -1,16 +1,44 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layout}">
+
 <head>
 	<title>MRS</title>
+	<script th:src="@{/js/test/system.js}"></script>
 </head>
+
 <body>
 	<!--/* layoutに埋め込む部分を定義 */-->
 	<div layout:fragment="contents">
 		<h3>system専用ページ(仮)</h3>
-        <!-- エラーメッセージ -->
-        <p style="color: red" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
-            th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
-        </p>
+		<!-- エラーメッセージ -->
+		<p style="color: red" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
+			th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+		</p>
+		<span>チェック件数：</span><span id="checkedcount">0</span>
+		<table>
+			<thead>
+				<tr>
+					<th class="check_col">
+						<input type="checkbox" class="check" id="allcheckbox" />
+					</th>
+					<th class="no">No.</th>
+					<th class="branch">枝番</th>
+					<th class="val">値</th>
+				</tr>
+
+			</thead>
+			<tbody>
+				<tr th:each="testModel : ${testModelList}">
+					<td><input type="checkbox" class="check checkedtd" name="checkbox" value="" /></td>
+					<td><span th:text="${testModel.no}"></span></td>
+					<td><span th:text="${testModel.branch}"></span></td>
+					<td><span th:text="${testModel.val}"></span></td>
+					<input type="hidden" id="kbn" name="kbn" th:value="${testModel.kbn}">
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
+
 </html>

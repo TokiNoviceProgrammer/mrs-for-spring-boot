@@ -1,5 +1,8 @@
 package mrs.app.login;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -8,12 +11,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import mrs.domain.model.TestModel;
 import mrs.domain.service.user.ReservationUserDetailsService;
 
 @Controller
@@ -76,7 +81,32 @@ public class LoginController {
 
 	@GetMapping("/system")
 	// パスワード変更表示
-	String system() {
+	String system(Model mode) {
+		List<TestModel> testModelList = new ArrayList<>();
+
+		TestModel testModel01 = new TestModel();
+		testModel01.setNo("1");
+		testModel01.setBranch("01");
+		testModel01.setVal("テスト値1-01");
+		testModel01.setKbn("10");
+		testModelList.add(testModel01);
+
+		TestModel testModel02 = new TestModel();
+		testModel02.setNo("1");
+		testModel02.setBranch("02");
+		testModel02.setVal("テスト値1-02");
+		testModel02.setKbn("11");
+		testModelList.add(testModel02);
+
+		TestModel testModel03 = new TestModel();
+		testModel03.setNo("2");
+		testModel03.setBranch("01");
+		testModel03.setVal("テスト値2-01");
+		testModel03.setKbn("20");
+		testModelList.add(testModel03);
+
+		mode.addAttribute("testModelList", testModelList);
+
 		return "login/system";
 	}
 }
