@@ -67,10 +67,33 @@ function sendCheckedData() {
         url: '/system', // サーバーサイドのエンドポイントを指定
         data: JSON.stringify(testModelList),
         success: function (response) {
-            console.log('Data sent successfully');
+            // 新しいHTMLからheadとbodyを抽出
+            const head = extractStringBetween(response, "<head>", "</head>");
+            const body = extractStringBetween(response, "<body>", "</body>");
+            // 既存のheadとbodyを差し替え
+            $('head').html(head);
+            $('body').html(body);
         },
         error: function (error) {
             console.error('Error sending data:', error);
         }
     });
+}
+/**
+ * 対象文字列内から開始文字列と終了文字列の間にある部分文字列を取出す
+ * @param {string} targetStr 対象文字列
+ * @param {string} startStr 開始文字列
+ * @param {string} endStr 終了文字列
+ * @returns ex) targetStr:'aaaSbbbEccc'、startStr:'S'、endStr:'E' → 'SbbbE'
+ */
+function extractStringBetween(targetStr, startStr, endStr) {
+    const startIndex = targetStr.indexOf(startStr);
+    const endIndex = targetStr.indexOf(endStr, startIndex + startStr.length);
+    let result = startStr;
+    if (startIndex !== -1 && endIndex !== -1) {
+        result += targetStr.substring(startIndex + startStr.length, endIndex);
+        result += endStr
+        return result;
+    }
+    return null; // 対象文字列内に開始文字列と終了文字列が存在しない場合はnullを返却する
 }
