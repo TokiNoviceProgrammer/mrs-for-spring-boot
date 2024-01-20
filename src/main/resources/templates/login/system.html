@@ -9,7 +9,7 @@
 
 <body>
 	<!--/* layoutに埋め込む部分を定義 */-->
-	<div layout:fragment="contents">
+	<div id="contentContainer" layout:fragment="contents">
 		<h3>system専用ページ(仮)</h3>
 		<!-- エラーメッセージ -->
 		<p style="color: red" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"

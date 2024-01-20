@@ -1,5 +1,6 @@
 console.log("system.js 読み込み");
 $(document).ready(function () {
+    changeMaxHeight("contentContainer", "195")
     // allcheckboxのイベントリスナーを設定
     document.getElementById('allcheckbox').addEventListener('change', function () {
         // allcheckboxがチェックされたらテーブルデータのチェックボックスを全選択
@@ -96,4 +97,16 @@ function extractStringBetween(targetStr, startStr, endStr) {
         return result;
     }
     return null; // 対象文字列内に開始文字列と終了文字列が存在しない場合はnullを返却する
+}
+
+/**
+ * max-heightを変更する関数
+ * @param {string} elementId 
+ * @param {string} height 
+ */
+function changeMaxHeight(elementId, height) {
+    // 要素を取得
+    let contentContainer = document.getElementById(elementId);
+    // スタイルを変更
+    contentContainer.style.maxHeight = height + 'px';
 }
