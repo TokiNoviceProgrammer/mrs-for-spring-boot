@@ -11,6 +11,9 @@ public class Sample01ServiceImpl implements Sample01Service {
 
 	@Override
 	public String process01(String arg) {
+		Integer number = this.convertToInteger("123");
+		System.out.println(number);
+
 		//		Class<? extends Object> classObject = new Object().getClass();
 		//		String className = classObject.getEnclosingClass().getName();
 		//		String methodName = classObject.getEnclosingMethod().getName();
@@ -34,9 +37,19 @@ public class Sample01ServiceImpl implements Sample01Service {
 		}
 
 		String resultStr = sb.toString();
-		System.out.println(resultStr);
 
 		return resultStr;
+	}
+
+	private Integer convertToInteger(String numberStr) {
+		Integer number = null;
+		try {
+			number = Integer.parseInt(numberStr);
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid number format: " + numberStr);
+			return -1;
+		}
+		return number;
 	}
 
 }
