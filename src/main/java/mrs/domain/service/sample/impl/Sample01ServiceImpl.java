@@ -2,18 +2,24 @@ package mrs.domain.service.sample.impl;
 
 import java.util.Objects;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import mrs.domain.repository.sample.Sample01Repository;
 import mrs.domain.service.sample.Sample01Service;
+import mrs.exception.CustomException;
 
 @Service
 public class Sample01ServiceImpl implements Sample01Service {
 
+	private final Sample01Repository sample01Repository;
+
+	public Sample01ServiceImpl(Sample01Repository sample01Repository) {
+		this.sample01Repository = sample01Repository;
+	}
+
 	@Override
 	public String process01(String arg) {
-		Integer number = this.convertToInteger("123");
-		System.out.println(number);
-
 		//		Class<? extends Object> classObject = new Object().getClass();
 		//		String className = classObject.getEnclosingClass().getName();
 		//		String methodName = classObject.getEnclosingMethod().getName();
@@ -36,20 +42,24 @@ public class Sample01ServiceImpl implements Sample01Service {
 			sb.append(".");
 		}
 
+		String resultSelect = this.selectSample();
+		sb.append("The SQL execution result is 「" + resultSelect);
+		sb.append("」.");
+
 		String resultStr = sb.toString();
 
 		return resultStr;
 	}
 
-	private Integer convertToInteger(String numberStr) {
-		Integer number = null;
+	private String selectSample() {
 		try {
-			number = Integer.parseInt(numberStr);
-		} catch (NumberFormatException e) {
-			System.out.println("Invalid number format: " + numberStr);
-			return -1;
+			return this.sample01Repository.selectSample();
+
+		} catch (DataAccessException e) {
+			// データアクセスに関する一般的な例外
+			// CustomException にラップして再スロー
+			throw new CustomException("「DataAccessException」が発生しました。", e);
 		}
-		return number;
 	}
 
 }
