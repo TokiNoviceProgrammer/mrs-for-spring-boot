@@ -42,7 +42,7 @@ public class Sample01ServiceImpl implements Sample01Service {
 			sb.append(".");
 		}
 
-		String resultSelect = this.selectSample();
+		String resultSelect = this.selectSample("test");
 		sb.append("The SQL execution result is 「" + resultSelect);
 		sb.append("」.");
 
@@ -51,9 +51,9 @@ public class Sample01ServiceImpl implements Sample01Service {
 		return resultStr;
 	}
 
-	private String selectSample() {
+	private String selectSample(String str) {
 		try {
-			return this.sample01Repository.selectSample();
+			return this.sample01Repository.selectSample(str);
 
 		} catch (DataAccessException e) {
 			// データアクセスに関する一般的な例外

@@ -5,7 +5,7 @@
 	<select id="selectSample" resultType="string">
 		<![CDATA[
 			select
-			    'resultSample01MapperSelectSample';
+			    'resultSample01MapperSelectSample' || #{str};
 		]]>
 	</select>
 </mapper>

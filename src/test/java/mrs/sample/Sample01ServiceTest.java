@@ -1,6 +1,7 @@
 package mrs.sample;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import mrs.exception.CustomException;
 @SpringBootTest
 @DisplayName("Sample01Serviceのテスト")
 public class Sample01ServiceTest {
+
 	@Mock
 	private Sample01Repository sample01Repository;
 
@@ -46,7 +48,7 @@ public class Sample01ServiceTest {
 				+ "The SQL execution result is 「sampleResult」.";
 
 		// モックの設定
-		when(sample01Repository.selectSample()).thenReturn("sampleResult");
+		when(sample01Repository.selectSample(any())).thenReturn("sampleResult");
 
 		// テスト実行
 		String result = this.sample01Service.process01(argument);
@@ -65,7 +67,7 @@ public class Sample01ServiceTest {
 				+ "The SQL execution result is 「sampleResult」.";
 
 		// モックの設定
-		when(sample01Repository.selectSample()).thenReturn("sampleResult");
+		when(sample01Repository.selectSample(any())).thenReturn("sampleResult");
 
 		// テスト実行
 		String result = this.sample01Service.process01(argument);
@@ -78,7 +80,7 @@ public class Sample01ServiceTest {
 	@DisplayName("テストケース03: DataAccessExceptionが発生する場合")
 	public void test03_DataAccessException() {
 		// リポジトリのモックを設定して例外を発生させる
-		when(sample01Repository.selectSample()).thenThrow(new DataAccessException("mock exception") {
+		when(sample01Repository.selectSample(any())).thenThrow(new DataAccessException("mock exception") {
 		});
 
 		// テスト実行＆例外の検証

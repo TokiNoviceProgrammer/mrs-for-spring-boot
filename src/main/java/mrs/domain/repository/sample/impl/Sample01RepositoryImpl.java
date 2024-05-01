@@ -15,8 +15,8 @@ public class Sample01RepositoryImpl implements Sample01Repository {
 	}
 
 	@Override
-	public String selectSample() {
-		return this.sample01Mapper.selectSample();
+	public String selectSample(String str) {
+		return this.sample01Mapper.selectSample(str);
 	}
 
 }
