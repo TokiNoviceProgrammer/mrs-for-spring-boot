@@ -4,16 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 
 import mrs.domain.repository.sample.Sample01Repository;
-import mrs.domain.service.sample.Sample01Service;
 import mrs.domain.service.sample.impl.Sample01ServiceImpl;
 import mrs.exception.CustomException;
 
@@ -23,20 +21,8 @@ public class Sample01ServiceTest {
 
 	@Mock
 	private Sample01Repository sample01Repository;
-
-	private Sample01Service sample01Service;
-
-	@BeforeEach //各テストメソッドが実行される前処理
-	public void setUp() {
-		// テストクラス内のモックオブジェクトを初期化
-		// @Mockアノテーションで注釈付けされたモックオブジェクトをテストクラス内で初期化し、
-		// それらのモックオブジェクトに対するインスタンスを作成
-		// thisは、テストクラス自体を参照しており、
-		// openMocksメソッドによって初期化されるモックオブジェクトがこのテストクラス内で利用可能になる
-		MockitoAnnotations.openMocks(this);
-		// Sample01ServiceImplのコンストラクタにsample01Repositoryを渡してインスタンス化
-		sample01Service = new Sample01ServiceImpl(sample01Repository);
-	}
+	@InjectMocks //モックオブジェクトがインジェクションされる
+	private Sample01ServiceImpl targetService;
 
 	@Test
 	@DisplayName("テストケース01")
@@ -51,7 +37,7 @@ public class Sample01ServiceTest {
 		when(sample01Repository.selectSample(any())).thenReturn("sampleResult");
 
 		// テスト実行
-		String result = this.sample01Service.process01(argument);
+		String result = this.targetService.process01(argument);
 
 		// 結果の検証
 		assertEquals(expected, result);
@@ -70,7 +56,7 @@ public class Sample01ServiceTest {
 		when(sample01Repository.selectSample(any())).thenReturn("sampleResult");
 
 		// テスト実行
-		String result = this.sample01Service.process01(argument);
+		String result = this.targetService.process01(argument);
 
 		// 結果の検証
 		assertEquals(expected, result);
@@ -84,6 +70,6 @@ public class Sample01ServiceTest {
 		});
 
 		// テスト実行＆例外の検証
-		assertThrows(CustomException.class, () -> sample01Service.process01("test"));
+		assertThrows(CustomException.class, () -> targetService.process01("test"));
 	}
 }

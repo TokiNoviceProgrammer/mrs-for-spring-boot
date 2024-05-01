@@ -4,12 +4,14 @@ import java.util.Objects;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mrs.domain.repository.sample.Sample01Repository;
 import mrs.domain.service.sample.Sample01Service;
 import mrs.exception.CustomException;
 
 @Service
+@Transactional
 public class Sample01ServiceImpl implements Sample01Service {
 
 	private final Sample01Repository sample01Repository;
