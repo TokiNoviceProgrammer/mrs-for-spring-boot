@@ -91,7 +91,22 @@ public class WebSecurityConfig {
 						// 成功時・失敗時のハンドラーは独自で実装して設定
 						.successHandler(this.successHandler()).failureHandler(this.failureHandler())
 						// ログイン画面・認証url・認証失敗時の遷移先へのアクセスは常に許可する
+						.permitAll())
+				// ログアウトの設定
+				.logout(logout -> logout
+						// ログアウト処理url
+						.logoutUrl("/logout")
+						// ログアウト成功時の遷移先
+						.logoutSuccessUrl("/login")
+						// セッションを破棄
+						.invalidateHttpSession(true)
+						// cookieを削除
+						.deleteCookies("JSESSIONID")
+						// ログアウト処理とログアウト成功時の遷移先をアクセス許可
 						.permitAll());
+		// XSS対策としてContent-Security-Policyヘッダーを設定
+		//				.headers(headers -> headers.contentSecurityPolicy(csp -> csp
+		//						.policyDirectives("default-src 'self'")));
 		return http.build();
 	}
 
