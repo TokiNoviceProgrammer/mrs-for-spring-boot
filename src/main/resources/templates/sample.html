@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>調査用</title>
+    <script>
+        window.onload = function () {
+            // 「addEventListener('click')」でのイベント登録はthisが使えるため、
+            // 修正案のコードが使用可能ですが、
+            // 「addEventListener('submit')」の場合はthisが使えないため、使用できません。
+            // (「フォーカスされた要素のformactionを取得」を使用するしかない)
+            // そのため、エンター押下時に意図しない処理は考慮する必要があります。
+            for (let i = 1; i <= 3; i++) {
+                // サブボタンの前処理イベント（ポップアップ）
+                const id = 'sub0' + String(i);
+                document.getElementById(id).addEventListener('click', function (event) {
+                    event.preventDefault(); // 一旦フォーム送信を止める
+                    alert('サブボタン0' + String(i) + 'の処理が実行されました');
+                    // ポップアップ後にサブボタンに指定されたアクションで送信する
+                    // ★フォーカスされた要素のformactionを取得 → エンター押下の場合は何も取得されない★
+                    const elementAction = document.activeElement.getAttribute("formaction");//←現状のコード
+                    // ★イベントがバインドされた要素のformactionを取得★
+                    // const elementAction = this.getAttribute('formaction');//←修正案のコード
+                    // ★idからformActionを取得する
+                    // const elementAction = document.getElementById(id).getAttribute("formaction");//←修正案のコード
+                    if (elementAction !== null && elementAction !== "") {
+                        this.form.action = elementAction;
+                    }
+                    this.form.submit(); // フォーム送信
+                });
+            }
+
+            // document.getElementById('test').addEventListener('click', function (event) {
+            //     const form = document.getElementById("testForm");
+            //     const activeElementAction = document.activeElement.getAttribute("formaction");
+            //     if (activeElementAction !== null && activeElementAction !== "") {
+            //         form.action = activeElementAction;
+            //     }
+            //     form.submit(); // フォーム送信
+            // });
+            document.getElementById('testBtn').addEventListener('click', function (event) {
+                event.preventDefault(); // 一旦フォーム送信を止める
+                alert('testForm02の処理が実行されました');
+                const form = document.getElementById("testForm02");
+                form.submit(); // フォーム送信
+            });
+        };
+    </script>
+</head>
+
+<body>
+    <form id="testForm" method="POST" action="/main">
+        <!-- テキスト入力 -->
+        <input type="text" name="testInput01">
+        <input type="text" name="testInput02">
+        <input type="text" name="testInput03">
+        <!-- <input id="test" type="submit" value="テスト" formaction="/test"> -->
+        <!-- エンターのよる自動サブミット防止用 -->
+        <!-- <input id="dummy" type="submit" value="ダミー" style="display: none" disabled> -->
+    </form>
+    <!-- サブボタン01 -->
+    <input type="submit" id="sub01" value="サブボタン01" form="testForm" formaction="/sub01">
+    <!-- サブボタン02 -->
+    <input type="submit" id="sub02" value="サブボタン02" form="testForm" formaction="/sub02">
+    <!-- サブボタン03 -->
+    <input type="submit" id="sub03" value="サブボタン03" form="testForm" formaction="/sub03">
+
+    <form id="testForm02" method="POST" action="/main02">
+        <!-- type="button"かつ複数のテキスト入力があれば自動でサブミットされない -->
+        <input type="text" name="testInput21">
+        <input type="text" name="testInput22">
+        <button id="testBtn" type="button">ボタンタイプ=button</button>
+    </form>
+
+</body>
+
+</html>
